@@ -5,7 +5,7 @@ Some simple utilities in Python.
 Compute the MD5 hash of a file. Just a UI for Python's hashlib.
 
 ## pygrep.py
-Print lines from stdin that match a regular expression. Just an UI for Python's re.search().
+Print lines from stdin that match a regular expression. Just a UI for Python's re.search().
 
 ## split.py
 ```
