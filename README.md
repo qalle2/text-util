@@ -1,11 +1,32 @@
 # simple-util
-Some simple utilities in Python.
+Some simple command-line utilities in Python.
+
+## count_words.py
+```
+usage: count_words.py [-h] [-f] [-c]
+
+Count words (sequences of Unicode Letter characters) from stdin. Output distinct words and their counts in CSV format
+in Unicode order.
+
+optional arguments:
+  -h, --help       show this help message and exit
+  -f, --case-fold  Fold the letter case (using Python's str.casefold() method).
+  -c, --no-counts  Do not print the word counts, just distinct words, one per line.
+```
 
 ## md5.py
-Compute the MD5 hash of a file. Just a UI for Python's hashlib.
+```
+Compute the MD5 hash of a file. Argument: filename
+```
+
+Just a UI for Python's `hashlib.md5()`.
 
 ## pygrep.py
-Print lines from stdin that match a regular expression. Just a UI for Python's re.search().
+```
+Print lines from stdin that match a regular expression case-insensitively. Argument: regular expression
+```
+
+Just a UI for Python's `re.search()`.
 
 ## split.py
 ```
