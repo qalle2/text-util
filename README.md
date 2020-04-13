@@ -1,18 +1,24 @@
 # simple-util
 Some simple command-line utilities in Python.
 
+## casefold.py
+```
+Copy stdin to stdout and fold the letter case (using Python's str.casefold() method).
+```
+
 ## count_words.py
 ```
-usage: count_words.py [-h] [-f] [-c]
+usage: count_words.py [-h] [-c]
 
 Count words (sequences of Unicode Letter characters) from stdin. Output distinct words and their counts in CSV format
 in Unicode order.
 
 optional arguments:
   -h, --help       show this help message and exit
-  -f, --case-fold  Fold the letter case (using Python's str.casefold() method).
-  -c, --no-counts  Do not print the word counts, just distinct words, one per line.
+  -c, --no-counts  Do not print the word counts.
 ```
+
+Hint: use the output from casefold.py as input to this program.
 
 ## md5.py
 ```
