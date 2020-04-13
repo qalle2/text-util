@@ -1,4 +1,4 @@
-"""Count words (sequences of Unicode Letter characters) in a UTF-8 text file."""
+"""Count words (sequences of Unicode Letter characters) from stdin."""
 
 import argparse
 import collections
@@ -14,12 +14,7 @@ def parse_arguments():
     )
 
     parser.add_argument(
-        "-f", "--case-fold", action="store_true",
-        help="Fold the letter case (using Python's str.casefold() method)."
-    )
-    parser.add_argument(
-        "-c", "--no-counts", action="store_true",
-        help="Do not print the word counts, just distinct words, one per line."
+        "-c", "--no-counts", action="store_true", help="Do not print the word counts."
     )
 
     return parser.parse_args()
@@ -41,18 +36,18 @@ def string_to_words(string_):
         # end the last word
         yield string_[wordStartPos:]
 
-def stdin_to_words(caseFold):
+def stdin_to_words():
     """Generate words from stdin."""
 
     for line in sys.stdin:
-        for word in string_to_words(line.casefold() if caseFold else line):
+        for word in string_to_words(line):
             yield word
 
 def main():
     """The main function."""
 
     args = parse_arguments()
-    words = stdin_to_words(args.case_fold)
+    words = stdin_to_words()
     if args.no_counts:
         for word in sorted(set(words)):
             print(word)
