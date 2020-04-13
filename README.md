@@ -8,21 +8,10 @@ Copy stdin to stdout and fold the letter case (using Python's str.casefold() met
 
 ## count_codepoints.py
 ```
-usage: count_codepoints.py [-h] [-n {,nfd,nfc,nfkd,nfkc}] input_file
-
-Count Unicode codepoints in a text file. Output them in CSV format, sorted by codepoint.
-
-positional arguments:
-  input_file            The UTF-8 text file to read.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -n {,nfd,nfc,nfkd,nfkc}, --normalization {,nfd,nfc,nfkd,nfkc}
-                        Which Unicode Normalization Form to apply to each line (""=none). See
-                        https://unicode.org/reports/tr15/#Norm_Forms (default: )
-
-See https://unicode.org/reports/tr44/#Property_Values for general category values.
+Count Unicode codepoints from stdin. Output them in CSV format, sorted by codepoint.
 ```
+
+Hint: use the output from casefold.py or uninorm.py as input to this program.
 
 ## count_words.py
 ```
@@ -36,7 +25,7 @@ optional arguments:
   -c, --no-counts  Do not print the word counts.
 ```
 
-Hint: use the output from casefold.py as input to this program.
+Hint: use the output from casefold.py or uninorm.py as input to this program.
 
 ## md5.py
 ```
@@ -67,3 +56,18 @@ positional arguments:
 optional arguments:
   -h, --help      show this help message and exit
 ```
+
+## uninorm.py
+```
+usage: uninorm.py [-h] [-n {nfd,nfc,nfkd,nfkc}]
+
+Copy stdin to stdout and apply one of the Unicode Normalization Forms.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n {nfd,nfc,nfkd,nfkc}, --normalization {nfd,nfc,nfkd,nfkc}
+                        Which Unicode Normalization Form to apply to each line. See
+                        https://unicode.org/reports/tr15/#Norm_Forms (default: nfc)
+```
+
+Just a UI for Python's `unicodedata.normalize()`.
