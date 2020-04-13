@@ -6,6 +6,24 @@ Some simple command-line utilities in Python.
 Copy stdin to stdout and fold the letter case (using Python's str.casefold() method).
 ```
 
+## count_codepoints.py
+```
+usage: count_codepoints.py [-h] [-n {,nfd,nfc,nfkd,nfkc}] input_file
+
+Count Unicode codepoints in a text file. Output them in CSV format, sorted by codepoint.
+
+positional arguments:
+  input_file            The UTF-8 text file to read.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n {,nfd,nfc,nfkd,nfkc}, --normalization {,nfd,nfc,nfkd,nfkc}
+                        Which Unicode Normalization Form to apply to each line (""=none). See
+                        https://unicode.org/reports/tr15/#Norm_Forms (default: )
+
+See https://unicode.org/reports/tr44/#Property_Values for general category values.
+```
+
 ## count_words.py
 ```
 usage: count_words.py [-h] [-c]
