@@ -2,16 +2,12 @@
 cls
 
 echo === Default settings ===
-python count_codepoints.py test-in\count_codepoints.txt
+python count_codepoints.py < test-in\count_codepoints.txt
 echo.
 
 echo === NFD ===
-python count_codepoints.py --normalization nfd test-in\count_codepoints.txt
+python uninorm.py -n nfd < test-in\count_codepoints.txt | python count_codepoints.py
 echo.
 
 echo === NFC ===
-python count_codepoints.py --normalization nfc test-in\count_codepoints.txt
-echo.
-
-echo === Help text ===
-python count_codepoints.py --help
+python uninorm.py -n nfc < test-in\count_codepoints.txt | python count_codepoints.py
