@@ -1,0 +1,17 @@
+clear
+
+echo "=== Input ==="
+cat test/codepoints.txt
+
+echo "=== Output - no normalization ==="
+python3 count_codepoints.py < test/codepoints.txt
+echo ""
+
+echo "=== Output - NFD ==="
+python3 uninorm.py -n nfd < test/codepoints.txt | python3 count_codepoints.py
+echo ""
+
+echo "=== Output - NFC ==="
+python3 uninorm.py -n nfc < test/codepoints.txt | python3 count_codepoints.py
+echo ""
+
