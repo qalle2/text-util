@@ -1,10 +1,8 @@
-"""Copy stdin to stdout and fold the letter case (using Python's str.casefold() method)."""
+"""Print lines from stdin via Python's .casefold() method."""
 
 import sys
 
 def main():
-    """The main function."""
-
     for line in sys.stdin:
         print((line[:-1] if line.endswith("\n") else line).casefold())
 

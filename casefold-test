@@ -1,8 +1,0 @@
-clear
-
-echo "=== Input ==="
-cat test/casefold.txt
-
-echo "=== Output ==="
-python3 casefold.py < test/casefold.txt
-

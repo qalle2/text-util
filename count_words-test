@@ -1,9 +1,0 @@
-clear
-
-echo "=== Input ==="
-cat test/words.txt
-
-echo "=== Output ==="
-python3 count_words.py < test/words.txt
-echo ""
-

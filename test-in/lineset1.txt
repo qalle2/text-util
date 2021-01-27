@@ -1,0 +1,2 @@
+line_in_both_files
+line_in_first_file_only
