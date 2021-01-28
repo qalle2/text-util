@@ -1,7 +1,6 @@
 """Print lines (with duplicates) from stdin in case-insensitive Finnish order.
 See http://www.jkorpela.fi/kielenopas/4.15.html"""
 
-import collections
 import sys
 
 # lower case letters (codepoints < 0x180) to replace for sorting
