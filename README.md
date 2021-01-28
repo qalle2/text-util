@@ -10,6 +10,9 @@ Print codepoints, names and counts of unique characters from stdin.
 ## countlines.py
 Print unique lines and their counts from stdin.
 
+## finsort.py
+Print lines (with duplicates) from stdin in case-insensitive Finnish order.
+
 ## getwords.py
 Print words (sequences of Unicode Letter characters) from stdin.
 

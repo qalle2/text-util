@@ -12,6 +12,10 @@ echo "=== countlines ==="
 python3 countlines.py < test-in/countlines.txt
 echo
 
+echo "=== finsort ==="
+python3 finsort.py < test-in/finsort.txt
+echo
+
 echo "=== getwords ==="
 python3 getwords.py < test-in/getwords.txt
 echo
