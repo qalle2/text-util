@@ -1,14 +1,8 @@
 """Print unique lines and their counts from stdin."""
 
-import collections
-import sys
+import collections, sys
 
-def main():
-    words = collections.Counter(
-        line[:-1] if line.endswith("\n") else line for line in sys.stdin
-    )
-    for word in words:
-        print(f'"{word:s}",{words[word]}')
+lineCounts = collections.Counter(l.rstrip("\n") for l in sys.stdin)
 
-if __name__ == "__main__":
-    main()
+for line in lineCounts:
+    print(f'"{line}",{lineCounts[line]}')

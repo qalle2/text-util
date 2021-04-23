@@ -1,6 +1,6 @@
 clear
 
-echo "=== casefold ==="
+echo "=== casefold (should print the same word twice) ==="
 python3 casefold.py < test-in/casefold.txt
 echo
 
@@ -18,6 +18,15 @@ echo
 
 echo "=== getwords ==="
 python3 getwords.py < test-in/getwords.txt
+echo
+
+echo "=== grouplines ==="
+echo "Entire lines:"
+python3 grouplines.py 0 < test-in/grouplines.txt
+echo "Prefixes:"
+python3 grouplines.py 8 < test-in/grouplines.txt
+echo "Suffixes:"
+python3 grouplines.py -8 < test-in/grouplines.txt
 echo
 
 echo "=== lineset ==="

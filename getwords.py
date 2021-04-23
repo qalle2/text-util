@@ -1,27 +1,20 @@
-"""Print words (sequences of Unicode Letter characters) from stdin."""
+"""Print words (sequences of Unicode Letter characters or non-initial non-final apostrophes)
+from stdin."""
 
-import sys
-import unicodedata
+import sys, unicodedata
 
-def get_words(string_):
-    wordStartPos = None
-    for (pos, char) in enumerate(string_):
+APOSTROPHES = "'’"
+
+for line in sys.stdin:
+    startPos = None  # start position of current word
+    line = line + " "  # must end with a non-letter non-apostrophe character
+
+    for (pos, char) in enumerate(line):
         isLetter = unicodedata.category(char).startswith("L")
-        if wordStartPos is None and isLetter:
-            # start word
-            wordStartPos = pos
-        elif wordStartPos is not None and not isLetter:
-            # end word
-            yield string_[wordStartPos:pos]
-            wordStartPos = None
-    if wordStartPos is not None:
-        # end word
-        yield string_[wordStartPos:]
-
-def main():
-    for line in sys.stdin:
-        for word in get_words(line):
-            print(word)
-
-if __name__ == "__main__":
-    main()
+        if startPos is None and isLetter:
+            # start a word
+            startPos = pos
+        elif startPos is not None and not isLetter and char not in APOSTROPHES:
+            # end a word
+            print(line[startPos:pos].rstrip(APOSTROPHES))
+            startPos = None

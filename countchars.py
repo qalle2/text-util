@@ -1,17 +1,11 @@
 """Print codepoints, names and counts of unique characters from stdin."""
 
-import collections
-import sys
-import unicodedata
+import collections, sys, unicodedata
 
-def main():
-    chars = collections.Counter()
-    for line in sys.stdin:
-        chars.update(line[:-1] if line.endswith("\n") else line)
+charCounts = collections.Counter()
+for line in sys.stdin:
+    charCounts.update(line.rstrip("\n"))
 
-    for char in chars:
-        name = unicodedata.name(char, "?")
-        print(f'{ord(char)},"{name}",{chars[char]}')
-
-if __name__ == "__main__":
-    main()
+for char in charCounts:
+    name = unicodedata.name(char, "?")
+    print(f'{ord(char)},"{name}",{charCounts[char]}')

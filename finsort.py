@@ -1,4 +1,4 @@
-"""Print lines (with duplicates) from stdin in case-insensitive Finnish order.
+"""Print lines from stdin in case-insensitive Finnish order.
 See http://www.jkorpela.fi/kielenopas/4.15.html"""
 
 import sys
@@ -120,10 +120,6 @@ REPLACEMENTS = {
     ord("ž"): "z",
 }
 
-def main():
-    words = sorted((line[:-1] if line.endswith("\n") else line) for line in sys.stdin)
-    for word in sorted(words, key=lambda w: w.lower().translate(REPLACEMENTS)):
-        print(word)
-
-if __name__ == "__main__":
-    main()
+lines = sorted(l.rstrip("\n") for l in sys.stdin)
+for line in sorted(lines, key=lambda l: l.lower().translate(REPLACEMENTS)):
+    print(line)

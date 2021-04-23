@@ -1,40 +1,27 @@
-"""Read lines from stdin, print number of each distinct prefix/suffix."""
+import collections, sys
 
-import collections
-import sys
+if len(sys.argv) != 2:
+    sys.exit(
+        "Group lines from stdin by prefix (LENGTH > 0), suffix (LENGTH < 0) or entire line "
+        "(LENGTH = 0). Print number of lines in each group. Argument: LENGTH"
+    )
 
-def get_substrings(length):
-    """Generate prefixes/suffixes of specified length from stdin."""
+try:
+    length = int(sys.argv[1], 10)
+except ValueError:
+    sys.exit("LENGTH must be an integer.")
 
-    for line in sys.stdin:
-        line = line.rstrip("\n")
-        yield line[:length] if length > 0 else line[length:]
+# count prefixes/suffixes/entire lines from stdin
+substrCounts = collections.Counter()
+if length > 0:
+    substrCounts.update(l.rstrip("\n")[:length] for l in sys.stdin)
+else:
+    substrCounts.update(l.rstrip("\n")[length:] for l in sys.stdin)
 
-def main():
-    if len(sys.argv) != 2:
-        sys.exit(
-            "Read lines from stdin. Group them by prefix (LENGTH > 0), suffix (LENGTH < 0) or "
-            "whole line (LENGTH = 0). Print number of lines in each group. Argument: LENGTH"
-        )
+# sort normally, then case-insensitively, then by descending count
+substrings = sorted(substrCounts)
+substrings.sort(key=lambda s: s.casefold())
+substrings.sort(key=lambda s: substrCounts[s], reverse=True)
 
-    try:
-        length = int(sys.argv[1], 10)
-    except ValueError:
-        sys.exit("LENGTH must be an integer.")
-
-    # count prefixes/suffixes/whole lines
-    counts = collections.Counter(get_substrings(length))
-
-    # sort first by descending count, then alphabetically (case-insensitively)
-    substrs = sorted(counts)
-    substrs.sort(key=lambda s: s.casefold())
-    substrs.sort(key=lambda s: counts[s], reverse=True)
-
-    # print counts
-    formatCode = ("<" if length > 0 else ">") + str(abs(length) + 2) + "s"
-    for substr in substrs:
-        substr2 = format(f'"{substr}"', formatCode)
-        print(f"{substr2}: {counts[substr]}")
-
-if __name__ == "__main__":
-    main()
+for substring in substrings:
+    print(f'"{substring}",{substrCounts[substring]}')
