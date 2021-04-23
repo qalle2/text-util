@@ -11,17 +11,12 @@ try:
 except ValueError:
     sys.exit("LENGTH must be an integer.")
 
-# count prefixes/suffixes/entire lines from stdin
 substrCounts = collections.Counter()
+lines = (l.rstrip("\n") for l in sys.stdin)
 if length > 0:
-    substrCounts.update(l.rstrip("\n")[:length] for l in sys.stdin)
+    substrCounts.update(l[:length] for l in lines)
 else:
-    substrCounts.update(l.rstrip("\n")[length:] for l in sys.stdin)
+    substrCounts.update(l[length:] for l in lines)
 
-# sort normally, then case-insensitively, then by descending count
-substrings = sorted(substrCounts)
-substrings.sort(key=lambda s: s.casefold())
-substrings.sort(key=lambda s: substrCounts[s], reverse=True)
-
-for substring in substrings:
-    print(f'"{substring}",{substrCounts[substring]}')
+for substr in substrCounts:
+    print(f'"{substr}",{substrCounts[substr]}')

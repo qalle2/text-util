@@ -2,7 +2,5 @@
 
 import collections, sys
 
-lineCounts = collections.Counter(l.rstrip("\n") for l in sys.stdin)
-
-for line in lineCounts:
-    print(f'"{line}",{lineCounts[line]}')
+for (line, count) in collections.Counter(l.rstrip("\n") for l in sys.stdin).items():
+    print(f'"{line}",{count}')
