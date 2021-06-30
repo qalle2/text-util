@@ -3,9 +3,8 @@ import sys, unicodedata
 # replacements made in addition to unicodedata.decomposition()
 # Note: don't be language-specific! Interpret letters by what they look like, e.g. Æ = AE (not Ae),
 # ß = sz (not ss), þ = none (not t/th).
-#
 ADDITIONAL_REPLACEMENTS = {
-    # Latin-1 Supplement (U+0080...U+00FF); note: no thorn
+    # Latin-1 Supplement (U+0080...U+00FF)
     "Æ": "AE",
     "Ð": "D",
     "Ø": "O",
@@ -47,7 +46,7 @@ ADDITIONAL_REPLACEMENTS = {
     "Ǳ": "DZ",
     "ǲ": "Dz",
     "ǳ": "dz",
-    # Latin Extended Additional (U+1E00-U+1EFF) (incomplete)
+    # Latin Extended Additional (U+1E00...U+1EFF) (incomplete)
     "ẞ": "SZ",
 }
 
@@ -60,7 +59,7 @@ def decompose(char):
         pass
     # ...then unicodedata (recurse if decomposition is not ASCII)
     deco = unicodedata.decomposition(char).split(" ")[0]
-    if len(deco) == 4 and set(deco).issubset(set("0123456789ABCDEF")):
+    if deco and set(deco).issubset(set("0123456789ABCDEF")):
         deco = int(deco, 16)
         if deco <= 0x7f:
             return chr(deco)
