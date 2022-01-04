@@ -1,4 +1,4 @@
-import re, os, sys
+import collections, re, os, sys
 
 HELP_TEXT = """\
 Find a word in the Unix dictionary case-insensitively. No characters other than a-z allowed.
@@ -35,27 +35,42 @@ def parse_args():
     if re.search(r"^[a-z]*$", arg3) is None:
         sys.exit("Invalid third argument.")
     arg3 = set(arg3)
+    if arg3 & (set(arg1) | arg2):
+        sys.exit("Third argument contains letters specified in other arguments.")
 
     return (arg1, arg2, arg3)
 
-def get_words(regex):
+def get_words():
     if not os.path.isfile(DICT_FILE):
         sys.exit("Dictionary file not found.")
 
     try:
         with open(DICT_FILE, "rt") as handle:
-            yield from(
-                w.rstrip("\n").lower() for w in handle
-                if re.search(regex, w, re.IGNORECASE) is not None
-            )
+            yield from(w.rstrip("\n").lower() for w in handle)
     except OSError:
         sys.exit("Error reading the dictionary file.")
 
 def main():
     (arg1, arg2, arg3) = parse_args()
+    # get words that match args
     regex = "^" + "".join(c if c != "-" else "[a-z]" for c in arg1) + "$"
-    words = {w for w in get_words(regex) if arg2.issubset(set(w)) and arg3.isdisjoint(set(w))}
-    for word in sorted(words):
+    words = {
+        w for w in get_words()
+        if re.search(regex, w, re.IGNORECASE) is not None
+        and arg2.issubset(set(w))
+        and arg3.isdisjoint(set(w))
+    }
+    # count letters in words (only once per word)
+    letterCnts = collections.Counter()
+    for word in words:
+        letterCnts.update(set(word))
+    # get unspecified letters in results
+    unusedLetters = set(letterCnts) - set(arg1) - arg2 - arg3
+    # sort results by how common their letters are among results
+    words = sorted(words)
+    words.sort(key=lambda w: sum(letterCnts[l] for l in set(w) & unusedLetters), reverse=True)
+    print("Words from most to least likely (no more than 10):")
+    for word in words[:10]:
         print(word)
 
 main()
