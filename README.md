@@ -12,6 +12,21 @@ Print lines from stdin via Python's .casefold() method.
 ### countlines.py
 Print unique lines and their counts from stdin.
 
+### findword.py
+```
+Find a word in the Unix dictionary case-insensitively. No characters other than a-z allowed.
+For Mastermind-style word games.
+Arguments (first one only, first and second one or all three):
+    - a word; hyphen ('-') = unknown letter
+    - letters that occur somewhere in the word; hyphen ('-') = none
+    - letters that do not occur anywhere in the word
+Examples:
+    chu---       six-letter  words that start with 'chu'
+    ---th ro     five-letter words that end   with 'th' and contain 'r' and 'o'
+    ---th ro f   five-letter words that end   with 'th' and contain 'r' and 'o' but no 'f'
+    v--- - e     four-letter words that start with 'v'  and don't contain 'e'
+```
+
 ### finsort.py
 Print lines from stdin in case-insensitive Finnish order. See [Jukka Korpela: Nykyajan kielenopas &ndash; Aakkosjärjestys](http://www.jkorpela.fi/kielenopas/4.15.html) (in Finnish).
 
