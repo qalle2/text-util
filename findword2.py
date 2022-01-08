@@ -27,7 +27,7 @@ words = sorted(words)
 words.sort(key=lambda w: sum(letterCnts.get(l, 0) for l in set(w)), reverse=True)
 print("Words (no more than 10):")
 for word in words[:10]:
-    print("{word} ({score})".format(
-        word=word,
+    print("{word} (score={score})".format(
+        word=word.upper(),
         score=sum(letterCnts.get(l, 0) for l in set(word))
     ))
