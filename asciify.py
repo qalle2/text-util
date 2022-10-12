@@ -1,8 +1,9 @@
 import sys, unicodedata
 
-# replacements made in addition to unicodedata.decomposition()
-# Note: don't be language-specific! Interpret letters by what they look like, e.g. Æ = AE (not Ae),
-# ß = sz (not ss), þ = none (not t/th).
+# replacements made in addition to unicodedata.decomposition(); conventions:
+# - don't be language-specific
+# - interpret letters by what they look like, e.g. Æ = AE (not Ae),
+#   ß = sz (not ss), þ = none (not t/th).
 ADDITIONAL_REPLACEMENTS = {
     # Latin-1 Supplement (U+0080...U+00FF)
     "Æ": "AE",
@@ -52,12 +53,13 @@ ADDITIONAL_REPLACEMENTS = {
 
 def decompose(char):
     # if character decomposes into an ASCII character, return it, otherwise "?"
-    # first try the table of exceptions...
+
+    # first try exceptions...
     try:
         return ADDITIONAL_REPLACEMENTS[char]
     except KeyError:
         pass
-    # ...then unicodedata (recurse if decomposition is not ASCII)
+    # ...then unicodedata recursively
     deco = unicodedata.decomposition(char).split(" ")[0]
     if deco and set(deco).issubset(set("0123456789ABCDEF")):
         deco = int(deco, 16)
@@ -72,5 +74,4 @@ def main():
             (c if ord(c) <= 0x7f else decompose(c)) for c in line.rstrip("\n")
         ))
 
-if __name__ == "__main__":
-    main()
+main()

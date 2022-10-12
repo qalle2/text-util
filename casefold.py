@@ -1,4 +1,4 @@
-"""Print lines from stdin via Python's .casefold() method."""
+# print lines from stdin in a format suitable for caseless comparisons
 
 import sys
 

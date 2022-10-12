@@ -1,4 +1,4 @@
-"""Print unique lines from stdin."""
+# print unique lines from stdin
 
 import sys
 

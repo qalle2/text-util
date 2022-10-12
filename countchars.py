@@ -1,4 +1,4 @@
-"""Print codepoints, names and counts of unique characters from stdin."""
+# print codepoints, names and counts of unique characters from stdin
 
 import collections, sys, unicodedata
 

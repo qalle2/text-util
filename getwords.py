@@ -1,5 +1,5 @@
-"""Print words (sequences of Unicode Letter characters or non-initial non-final apostrophes)
-from stdin."""
+# print words (sequences of Unicode Letter characters or non-initial non-final
+# apostrophes) from stdin
 
 import sys, unicodedata
 

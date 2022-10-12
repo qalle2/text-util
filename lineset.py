@@ -11,25 +11,31 @@ def read_lines(filename):
     except OSError:
         sys.exit("Error reading file.")
 
-if len(sys.argv) < 3:
-    sys.exit(
-        "Print setwise union (OPERATION=u), intersection (OPERATION=i) or difference "
-        "(OPERATION=d) of lines without duplicates. Args: OPERATION FILE1 [FILE2 ...]"
-    )
+def main():
+    if len(sys.argv) < 3:
+        sys.exit(
+            "Print setwise union (OPERATION=u), intersection (OPERATION=i) "
+            "or difference (OPERATION=d) of lines without duplicates. Args: "
+            "OPERATION FILE1 [FILE2 ...]"
+        )
 
-(operation, files) = (sys.argv[1], sys.argv[2:])
+    (operation, files) = (sys.argv[1], sys.argv[2:])
 
-try:
-    method = {"u": set.update, "i": set.intersection_update, "d": set.difference_update}[operation]
-except KeyError:
-    sys.exit("Invalid operation argument.")
+    try:
+        method = {
+            "u": set.update,
+            "i": set.intersection_update,
+            "d": set.difference_update
+        }[operation]
+    except KeyError:
+        sys.exit("Invalid operation argument.")
 
-# read lines from first file
-lines = set(read_lines(files[0]))
+    lines = set(read_lines(files[0]))
 
-# update lines using other files
-for filename in files[1:]:
-    method(lines, read_lines(filename))
+    for filename in files[1:]:
+        method(lines, read_lines(filename))
 
-for line in lines:
-    print(line)
+    for line in lines:
+        print(line)
+
+main()

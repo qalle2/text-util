@@ -1,5 +1,5 @@
-"""Print lines from stdin in case-insensitive Finnish order.
-See http://www.jkorpela.fi/kielenopas/4.15.html"""
+# print lines from stdin in case-insensitive Finnish order
+# see http://www.jkorpela.fi/kielenopas/4.15.html
 
 import sys
 

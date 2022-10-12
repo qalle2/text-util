@@ -1,30 +1,76 @@
 # text-util
 Simple command-line text-processing utilities in Python.
 
+Table of contents:
+* [Line-oriented](#line-oriented)
+* [Other](#other)
+
 ## Line-oriented
 
 ### asciify.py
 Read lines from stdin. Replace Latin non-ASCII letters with closest equivalent ASCII letters using Python's unicodedata.decomposition() and a custom replacement table.
 
 ### casefold.py
-Print lines from stdin via Python's .casefold() method.
+Print lines from stdin in a format suitable for caseless comparisons.
 
 ### countlines.py
 Print unique lines and their counts from stdin.
 
 ### findword.py
 ```
-Find a word in the Unix dictionary case-insensitively. No characters other than a-z allowed.
-For Mastermind-style word games.
-Arguments (first one only, first and second one or all three):
-    - a word; hyphen ('-') = unknown letter
-    - letters that occur somewhere in the word; hyphen ('-') = none
-    - letters that do not occur anywhere in the word
+Find a word in the Unix dictionary case-insensitively. No characters other than
+a-z allowed. For Mastermind-style word games.
+Arguments:
+    - required: a word; use '-' in place of an unknown letter
+    - optional: letters that occur somewhere in the word; '-' = none
+    - optional: letters that do not occur anywhere in the word
 Examples:
-    chu---       six-letter  words that start with 'chu'
-    ---th ro     five-letter words that end   with 'th' and contain 'r' and 'o'
-    ---th ro f   five-letter words that end   with 'th' and contain 'r' and 'o' but no 'f'
-    v--- - e     four-letter words that start with 'v'  and don't contain 'e'
+    chu---       6-letter words that start with 'chu'
+    ---th ro     5-letter words that end with 'th' and contain 'r' and 'o'
+    ---th ro f   5-letter words that end with 'th' and contain 'r' and 'o' but
+                 not 'f'
+    v--- - e     4-letter words that start with 'v' and don't contain 'e'
+```
+
+Example:
+```
+$ python3 findword.py st--- ro e
+Words that match specified pattern:
+    STORK
+    STORM
+    STORY
+    STROP
+Unknown letters: K M P Y
+Words with many common unknown letters:
+    AMPLY (score=3)
+    BUMPY (score=3)
+    CAMPY (score=3)
+    DUMPY (score=3)
+    EMPTY (score=3)
+    GIMPY (score=3)
+    IMPLY (score=3)
+    JUMPY (score=3)
+    LUMPY (score=3)
+    LYMPH (score=3)
+```
+
+### findword2.py
+Suggest words to begin a Mastermind-style game with. Arguments: word length, optionally a list of letters (a-z) to ignore.
+
+Example:
+```
+$ python3 findword2.py 4
+Words (no more than 10):
+ARES (score=3920)
+EARS (score=3920)
+ERAS (score=3920)
+SEAR (score=3920)
+SERA (score=3920)
+ALES (score=3913)
+ELSA (score=3913)
+LASE (score=3913)
+LEAS (score=3913)
+LESA (score=3913)
 ```
 
 ### finsort.py
