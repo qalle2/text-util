@@ -18,40 +18,21 @@ Print unique lines and their counts from stdin.
 
 ### findword.py
 ```
-Find a word in the Unix dictionary case-insensitively. No characters other than
-a-z allowed. For Mastermind-style word games.
-Arguments:
-    - required: a word; use '-' in place of an unknown letter
-    - optional: letters that occur somewhere in the word; '-' = none
-    - optional: letters that do not occur anywhere in the word
+Search the Unix dictionary case-insensitively. For playing word games.
+Words with characters other than A-Z or a-z won't be searched.
+Arguments: WORD SOMEWHERE NOWHERE
+    WORD:      a word with hyphens (-) in place of unknown letters; required
+    SOMEWHERE: letters that occur somewhere in the word; optional;
+               use hyphen (-) for none if you don't want to set this argument
+               but want to set the next argument
+    NOWHERE:   letters that don't occur in the word; optional
 Examples:
-    chu---       6-letter words that start with 'chu'
-    ---th ro     5-letter words that end with 'th' and contain 'r' and 'o'
-    ---th ro f   5-letter words that end with 'th' and contain 'r' and 'o' but
-                 not 'f'
-    v--- - e     4-letter words that start with 'v' and don't contain 'e'
-```
-
-Example:
-```
-$ python3 findword.py st--- ro e
-Words that match specified pattern:
-    STORK
-    STORM
-    STORY
-    STROP
-Unknown letters: K M P Y
-Words with many common unknown letters:
-    AMPLY (score=3)
-    BUMPY (score=3)
-    CAMPY (score=3)
-    DUMPY (score=3)
-    EMPTY (score=3)
-    GIMPY (score=3)
-    IMPLY (score=3)
-    JUMPY (score=3)
-    LUMPY (score=3)
-    LYMPH (score=3)
+    CH---- EO RS
+        will find six-letter words that start with CH and contain E and O
+        but no R or S (e.g. CHOICE).
+    ---TH - EI
+        will find five-letter words that end with TH and don't contain E or I
+        (e.g. CLOTH)
 ```
 
 ### findword2.py
