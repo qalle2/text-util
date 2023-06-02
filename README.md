@@ -35,25 +35,6 @@ Examples:
         (e.g. CLOTH)
 ```
 
-### findword2.py
-Suggest words to begin a Mastermind-style game with. Arguments: word length, optionally a list of letters (a-z) to ignore.
-
-Example:
-```
-$ python3 findword2.py 4
-Words (no more than 10):
-ARES (score=3920)
-EARS (score=3920)
-ERAS (score=3920)
-SEAR (score=3920)
-SERA (score=3920)
-ALES (score=3913)
-ELSA (score=3913)
-LASE (score=3913)
-LEAS (score=3913)
-LESA (score=3913)
-```
-
 ### finsort.py
 Print lines from stdin in case-insensitive Finnish order. See [Jukka Korpela: Nykyajan kielenopas &ndash; Aakkosjärjestys](http://www.jkorpela.fi/kielenopas/4.15.html) (in Finnish).
 
