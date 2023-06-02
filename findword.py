@@ -1,65 +1,88 @@
-import collections, re, os, sys
+import collections, itertools, re, os, string, sys
 
 HELP_TEXT = """\
-Find a word in the Unix dictionary case-insensitively. No characters other than
-a-z allowed. For Mastermind-style word games.
-Arguments:
-    - required: a word; use '-' in place of an unknown letter
-    - optional: letters that occur somewhere in the word; '-' = none
-    - optional: letters that do not occur anywhere in the word
+Search the Unix dictionary case-insensitively. For playing word games.
+Words with characters other than A-Z or a-z won't be searched.
+Arguments: WORD SOMEWHERE NOWHERE
+    WORD:      a word with hyphens (-) in place of unknown letters; required
+    SOMEWHERE: letters that occur somewhere in the word; optional;
+               use hyphen (-) for none if you don't want to set this argument
+               but want to set the next argument
+    NOWHERE:   letters that don't occur in the word; optional
 Examples:
-    chu---       6-letter words that start with 'chu'
-    ---th ro     5-letter words that end with 'th' and contain 'r' and 'o'
-    ---th ro f   5-letter words that end with 'th' and contain 'r' and 'o' but
-                 not 'f'
-    v--- - e     4-letter words that start with 'v' and don't contain 'e'\
+    CH---- EO RS
+        will find six-letter words that start with CH and contain E and O
+        but no R or S (e.g. CHOICE).
+    ---TH - EI
+        will find five-letter words that end with TH and don't contain E or I
+        (e.g. CLOTH)\
 """
 
-DICT_FILE = "/etc/dictionaries-common/words"
+DICT_PATHS = (
+    "/etc/dictionaries-common/words",
+    "/usr/dict/words",
+    "/usr/share/dict/words",
+)
 
 def parse_args():
+    # return (string word, set somewhere, set nowhere)
+
     if not 2 <= len(sys.argv) <= 4:
         sys.exit(HELP_TEXT)
 
-    arg1 = sys.argv[1].lower()
-    if re.search(r"^[a-z-]+$", arg1) is None:
-        sys.exit("Invalid 1st argument.")
+    word = sys.argv[1].upper()
+    if len(sys.argv) >= 3 and sys.argv[2] != "-":
+        somewhere = set(sys.argv[2].upper())
+    else:
+        somewhere = set()
+    if len(sys.argv) >= 4:
+        nowhere = set(sys.argv[3].upper())
+    else:
+        nowhere = set()
 
-    arg2 = sys.argv[2].lower() if len(sys.argv) >= 3 and sys.argv[2] != "-" \
-    else ""
-    if re.search(r"^[a-z]*$", arg2) is None:
-        sys.exit("Invalid 2nd argument.")
-    arg2 = set(arg2)
-    if len(arg2) > arg1.count("-"):
-        sys.exit("Can't have that many letters with unknown positions.")
-    if arg2 & set(arg1):
-        sys.exit("2nd argument contains same letters as 1st argument.")
+    if re.search("^[A-Z-]+$", word) is None:
+        sys.exit("Invalid WORD argument.")
+    if somewhere - set(string.ascii_uppercase):
+        sys.exit("Invalid SOMEWHERE argument.")
+    if nowhere - set(string.ascii_uppercase):
+        sys.exit("Invalid NOWHERE argument.")
 
-    arg3 = sys.argv[3].lower() if len(sys.argv) >= 4 else ""
-    if re.search(r"^[a-z]*$", arg3) is None:
-        sys.exit("Invalid 3rd argument.")
-    arg3 = set(arg3)
-    if arg3 & (set(arg1) | arg2):
-        sys.exit("3rd argument contains letters specified in other arguments.")
+    if len(somewhere) > word.count("-"):
+        sys.exit(
+            "There can't be more letters in SOMEWHERE argument than there are "
+            "hyphens in WORD."
+        )
 
-    return (arg1, arg2, arg3)
+    if set(word) & (somewhere | nowhere) or somewhere & nowhere:
+        sys.exit("No two arguments can contain the same letters.")
 
-def generate_words(length):
-    # generate words of specified length
-    regex = re.compile("^[A-Za-z]{" + str(length) + "}$")
+    return (word, somewhere, nowhere)
+
+def get_words(length):
+    # generate words of specified length in upper case
+
     try:
-        with open(DICT_FILE, "rt") as handle:
+        dictPath = [f for f in DICT_PATHS if os.path.exists(f)][0]
+    except IndexError:
+        sys.exit("Unix dictionary file not found.")
+
+    regex = re.compile("^[A-Za-z]{" + str(length) + "}$")
+
+    try:
+        with open(dictPath, "rt") as handle:
             handle.seek(0)
             yield from (
-                w.rstrip("\n").lower() for w in handle
+                w.rstrip("\n").upper() for w in handle
                 if regex.search(w) is not None
             )
     except OSError:
         sys.exit("Error reading file.")
 
-def generate_user_specified_words(words, arg1, arg2, arg3):
+def filter_words(words, arg1, arg2, arg3):
+    # generate user-specified words
     regex = re.compile(
-        "^" + "".join(c if c != "-" else "." for c in arg1) + "$"
+        "^" + "".join(c if c != "-" else "." for c in arg1) + "$",
+        re.IGNORECASE
     )
     yield from (
         w for w in words
@@ -69,39 +92,34 @@ def generate_user_specified_words(words, arg1, arg2, arg3):
 
 def main():
     (arg1, arg2, arg3) = parse_args()
-    words = set(generate_words(len(arg1)))
 
-    userSpecifiedWords = set(
-        generate_user_specified_words(words, arg1, arg2, arg3)
-    )
-    print("Words that match specified pattern:")
-    if len(userSpecifiedWords) <= 10:
-        for word in sorted(userSpecifiedWords):
-            print("    " + word.upper())
+    words = set(get_words(len(arg1)))
+    if not words:
+        sys.exit("No words with specified length in dictionary.")
+
+    filteredWords = set(filter_words(words, arg1, arg2, arg3))
+
+    print(f"Words that match specified pattern ({len(filteredWords)}):")
+    if set(arg1) == set("-") and not arg2 and not arg3:
+        print("(Not shown because the search wasn't narrowed down at all)")
     else:
-        print("    (too many to show)")
+        for word in sorted(filteredWords):
+            print(word)
 
     # count letters in words that match specified pattern (only once per word)
-    letterCnts = collections.Counter()
-    for word in userSpecifiedWords:
-        letterCnts.update(set(word))
-    unknownLtrs = set(letterCnts) - set(arg1) - arg2 - arg3
-    print(
-        "Unknown letters:", " ".join(sorted(l.upper() for l in unknownLtrs))
+    letterCnts = collections.Counter(
+        itertools.chain.from_iterable(set(w) for w in filteredWords)
     )
+    unknownLetters = set(letterCnts) - set(arg1) - arg2 - arg3
+    print("Unknown letters:", "".join(sorted(unknownLetters)))
 
-    # print words that contain many common unknown letters (search all words
-    # of correct length, not only those that match user-specified pattern)
-    words = sorted(words)
-    words.sort(
-        key=lambda w: sum(letterCnts[l] for l in set(w) & unknownLtrs),
-        reverse=True
-    )
     print("Words with many common unknown letters:")
-    for word in words[:10]:
-        print("    {word} (score={score})".format(
-            word=word.upper(),
-            score=sum(letterCnts[l] for l in set(word) & unknownLtrs)
-        ))
+    scoresByWord = dict(
+        (w, sum(letterCnts[l] for l in set(w) & unknownLetters)) for w in words
+    )
+    suggestions = sorted(w for w in words if scoresByWord[w] > 0)
+    suggestions.sort(key=lambda w: scoresByWord[w], reverse=True)
+    for word in suggestions[:10]:
+        print(f"{word} (score={scoresByWord[word]})")
 
 main()
